@@ -1,54 +1,43 @@
-package week2;
+//package week2;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class FibonacciHuge {
 	private static long getFibonacciHugeNaive(long n, int m) {
-		// Getting the period
-	    long pisanoPeriod = getPisanoPeriod(m);
-	     
-	    n = n % pisanoPeriod;
-	     
-	    long prev = 0;
-	    long curr = 1;
-	    long temp = 0;
-	     
-	    if (n == 0)
-	        return 0;
-	    else if (n == 1)
-	        return 1;
-	     
-	    for(int i = 0; i < n - 1; i++)
-	    {
-	        temp = curr;
-	        curr = (prev + curr) % m;
-	        prev = temp;
-	    }
-	    return curr % m;
+		n %= getPisanoPeriod(m);
 		
+		if(n == 0) return 0;
+		if(n == 1) return 1;
+		long res = 0;
+		long pre = 0;
+		long cur = 1;
+		long temp = 0;
+		for (int i = 0; i < n - 1; i++) {
+			temp = pre;
+			pre = cur;
+			cur = (temp + cur) % m;
+			res = cur;
+		}
+		return res;
 	}
-	
+
 	private static long getPisanoPeriod(long m) {
-		long prev = 0;
-	    long curr = 1;
-	    long res = 0;
-	    long temp = 0;
-	     
-	    for(int i = 0; i < m * 2; i++)
-	    {
-	        temp = curr;
-	        curr = (prev + curr) % m;
-	        prev = temp;
-	         
-	        if (prev == 0 && curr == 1 && i != 0) {
-	        	res = i + 1;
-	        	break;
-	        }
-	    }
-	    return res;
+		long res = 0;
+		long pre = 0;
+		long cur = 1;
+		long temp = 0;
+		for (int i = 0; i < m * 2; i++) {
+			temp = pre;
+			pre = cur;
+			cur = (temp + cur) % m;
+
+			if (i != 0 && pre == 0 && cur == 1) {
+				res = i + 1;
+				break;
+			}
+		}
+		return res;
+
 	}
 
 	public static void main(String[] args) {
