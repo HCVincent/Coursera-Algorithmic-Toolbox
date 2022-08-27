@@ -1,37 +1,38 @@
-//package week2;
+package week2;
 
 import java.util.Scanner;
 
 public class FibonacciHuge {
-	private static long getFibonacciHugeNaive(long n, int m) {
-		n %= getPisanoPeriod(m);
+	private static long getFibonacciHugeNaive(long n, long m) {
+		long pisanoPeriod = getPisanoPeriod(m);
+	     
+	    n = n % pisanoPeriod;
 		
 		if(n == 0) return 0;
 		if(n == 1) return 1;
-		long res = 0;
 		long pre = 0;
 		long cur = 1;
 		long temp = 0;
 		for (int i = 0; i < n - 1; i++) {
-			temp = pre;
-			pre = cur;
-			cur = (temp + cur) % m;
-			res = cur;
+			temp = cur;
+			cur = (pre + cur) % m;
+			pre = temp;
 		}
-		return res;
+		return cur % m;
 	}
 
 	private static long getPisanoPeriod(long m) {
-		long res = 0;
 		long pre = 0;
-		long cur = 1;
-		long temp = 0;
-		for (int i = 0; i < m * 2; i++) {
-			temp = pre;
-			pre = cur;
-			cur = (temp + cur) % m;
+		long curr = 1;
+		long res = 0;
+		
+		for (int i = 0; i < m * m; i++) {
+			long temp = 0;
+			temp = curr;
+			curr = (pre + curr) % m;
+			pre = temp;
 
-			if (i != 0 && pre == 0 && cur == 1) {
+			if (i != 0 && pre == 0 && curr == 1) {
 				res = i + 1;
 				break;
 			}
