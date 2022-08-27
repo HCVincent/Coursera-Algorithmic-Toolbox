@@ -6,13 +6,13 @@ public class GCD {
   private static int gcd(int a, int b) {
 	  if(a == b) return a;
 	  if(a == 1 || b == 1) return 1;
-	  int gcd = 1;
-	  while (gcd != a) {
+	  int result_gcd = 1;
+	  while (result_gcd != a) {
 		  if(a > b) a -= b;
 		  else if(b > a) b -= a;
-		  else gcd = a;
+		  else result_gcd = a;
 	  }
-	  return gcd;
+	  return result_gcd;
   }
 
   public static void main(String args[]) {
