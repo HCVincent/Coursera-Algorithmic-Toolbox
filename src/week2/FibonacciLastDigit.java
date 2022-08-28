@@ -32,8 +32,6 @@ public class FibonacciLastDigit {
 			int tmp_previous = previous;
 			previous = current;
 			current = (tmp_previous + current) % 10;
-        	
-
 		}
 
 		return current % 10;
