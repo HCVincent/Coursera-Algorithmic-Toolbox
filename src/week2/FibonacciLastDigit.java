@@ -22,7 +22,6 @@ public class FibonacciLastDigit {
 	}
 	
 	private static int getFibonacciLastDigitNaive(long n) {
-		// 0 ¡Ü n ¡Ü 10^5
 		if (n <= 1)
 			return Math.toIntExact(n);
 
