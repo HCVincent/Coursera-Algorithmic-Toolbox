@@ -21,13 +21,13 @@ public class FibonacciHuge {
 		return cur % m;
 	}
 
-	private static long getPisanoPeriod(long m) {
+	private static int getPisanoPeriod(long m) {
 		long pre = 0;
 		long curr = 1;
-		long res = 0;
+		int res = 0;
+		long temp = 0;
 		
 		for (int i = 0; i < m * m; i++) {
-			long temp = 0;
 			temp = curr;
 			curr = (pre + curr) % m;
 			pre = temp;
