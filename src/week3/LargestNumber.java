@@ -1,61 +1,48 @@
 package week3;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-import java.util.stream.IntStream;
 
 public class LargestNumber {
-	private static String largestNumber(String[] a) {
-		// write your code here
-		String result = "";
-		for (int i = 0; i < a.length; i++) {
-			int maxNum = Integer.valueOf(a[i]);
-			for (int j = i; j < a.length; j++) {
-				if (isBetter(Integer.valueOf(a[j]), maxNum)) {
-					maxNum = Integer.valueOf(a[j]);
-					a[j] = a[i];
-					a[i] = String.valueOf(maxNum);
-				}
-			}
-			result += a[i];
-		}
-		return result;
-	}
+    private static final Scanner scanner = new Scanner(System.in);
 
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		int n = scanner.nextInt();
-		String[] a = new String[n];
-		for (int i = 0; i < n; i++) {
-			a[i] = scanner.next();
-		}
-		System.out.println(largestNumber(a));
-	}
+    private static List<String> largestNumber(List<String> numbers) {
+        numbers.sort((o1, o2) -> {
+            for (int index = 0 ; index < o1.length() && index < o2.length() ; index++) {
+                if (o1.charAt(index) < o2.charAt(index)) {
+                    return 1;
+                } else if (o1.charAt(index) > o2.charAt(index)) {
+                    return -1;
+                }
+            }
+            String larger = o1.length() > o2.length() ? o1 : o2;
+            String smaller = o1.length() > o2.length() ? o2 : o1;
+            return o1.length() == o2.length()
+                    ? 0
+                    : Integer.compare(larger.charAt(smaller.length()), smaller.charAt(0))
+                        * Integer.compare(o2.length(), o1.length());
+        });
 
-	public static boolean isBetter(int a, int b) {
-		if (a == 1000)
-			return false;
-		if (b == 1000)
-			return true;
-		if (a == b)
-			return true;
-		int bigger = a > b ? a : b;
-		int smaller = a < b ? a : b;
-		int sDigits = String.valueOf(smaller).length();
-		int bDigits = String.valueOf(bigger).length();
-		int num = Double.valueOf(Math.pow(10, bDigits - sDigits)).intValue();
-		if (sDigits == bDigits)
-			return a > b ? true : false;
-		if (a > b) {
-			if (a / num == b) {
-				return isBetter(a % num, b);
-			}
-			return a / num > b ? true : false;
-		} else {
-			if (a == b / num) {
-				return isBetter(a, b % num);
-			}
-			return a > b / num ? true : false;
-		}
-	}
+        return numbers;
+    }
 
+    public static void main(String[] args) {
+        List<String> numbers = getArray(scanner.nextInt());
+        print(largestNumber(numbers));
+    }
+
+    private static void print(List<String> list) {
+        for (String string : list) {
+            System.out.print(string);
+        }
+    }
+
+    private static List<String> getArray(int length) {
+        List<String> numbers = new ArrayList<>(length);
+        for (int i = 0 ; i < length ; i++) {
+            numbers.add(scanner.next());
+        }
+        return numbers;
+    }
 }
