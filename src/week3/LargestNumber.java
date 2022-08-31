@@ -83,11 +83,15 @@ public class LargestNumber {
 		int bDigits = bigger.length();
 		int sDigits = smaller.length();
 		int num = Double.valueOf(Math.pow(10, bDigits - sDigits)).intValue();
-
 		if (a.length() == b.length())
 			return false;
 		if (bigger.charAt(smaller.length()) == smaller.charAt(0)) {
-			return isBetter(Integer.valueOf(bDigits) % num +"", smaller);
+			if(a.length() > b.length()) {
+				return isBetter(Integer.valueOf(bigger) % num +"", smaller);
+			} else {
+				return isBetter(smaller, Integer.valueOf(bigger) % num +"");
+			}
+			
 		}
 		int result = Integer.compare(bigger.charAt(smaller.length()), smaller.charAt(0));
 		if ( a.length() < b.length()) result *= -1; 
@@ -100,6 +104,7 @@ public class LargestNumber {
 	}
 
 	public static void main(String[] args) {
+		
         Scanner scanner = new Scanner(System.in);
         int n = scanner.nextInt();
         String[] a = new String[n];
