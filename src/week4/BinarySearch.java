@@ -5,6 +5,20 @@ import java.util.*;
 
 public class BinarySearch {
 
+//	static int binarySearch(int[] a, int x) {
+//		int left = 0, right = a.length;
+//		// write your code here
+//		while (left < right) {
+//			if (x == right / 2)
+//				return right / 2;
+//			else if (x < right / 2) {
+//				right = (left + right) / 2;
+//			} else {
+//				left += (right - left) / 2;
+//			}
+//		}
+//		return -1;
+//	}
 	static int binarySearch(int[] a, int x) {
 		int left = 0, right = a.length;
 		// write your code here
@@ -15,6 +29,21 @@ public class BinarySearch {
 				right = (left + right) / 2;
 			} else {
 				left += (right - left) / 2;
+			}
+		}
+		return -1;
+	}
+	
+	static int binarySearch(int[] a, int x, int left, int right) {
+		// write your code here
+		while (left < right) {
+			if (x == right / 2)
+				return right / 2;
+			else if (x < right / 2) {
+				binarySearch(a, x, left, right/2);
+			} else {
+				left += (right - left) / 2;
+				binarySearch(a, x, left, right);
 			}
 		}
 		return -1;
