@@ -1,32 +1,85 @@
 package week4;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Sorting {
-	private static Random random = new Random();
+	static int i, j;
 
-	private static int[] partition3(int[] a, int l, int r) {
-		// write your code here
-		int m1 = l;
-		int m2 = r;
-		int i = l + 1;
-		int pivotIndex = l;
-		int pivotValue = a[pivotIndex];
-		while (i <= m2) {
-			if(a[i] < pivotValue) {
-				swap(a, a[i++], a[m1++]);
+	private static void partition3(int[] a, int l, int r) {
+		i = l - 1;
+		j = r;
+		int p = l - 1, q = r;
+		int v = a[r];
+
+		while (true) {
+
+			// From left, find the first element greater than
+			// or equal to v. This loop will definitely
+			// terminate as v is last element
+			while (a[++i] < v);
+
+			// From right, find the first element smaller than
+			// or equal to v
+			while (v < a[--j])
+				if (j == l)
+					break;
+
+			// If i and j cross, then we are done
+			if (i >= j)
+				break;
+
+			// Swap, so that smaller goes on left greater goes
+			// on right
+			int temp = a[i];
+			a[i] = a[j];
+			a[j] = temp;
+
+			// Move all same left occurrence of pivot to
+			// beginning of array and keep count using p
+			if (a[i] == v) {
+				p++;
+				temp = a[i];
+				a[i] = a[p];
+				a[p] = temp;
+
 			}
-			else if(pivotValue < a[i]) {
-				swap(a, a[i], a[m2--]);
-			}
-			else {
-				i++;
+
+			// Move all same right occurrence of pivot to end of
+			// array and keep count using q
+			if (a[j] == v) {
+				q--;
+				temp = a[q];
+				a[q] = a[j];
+				a[j] = temp;
 			}
 		}
 
-		int[] m = { m1, m2 };
-		return m;
+		// Move pivot element to its correct index
+		int temp = a[i];
+		a[i] = a[r];
+		a[r] = temp;
+
+		// Move all left same occurrences from beginning
+		// to adjacent to arr[i]
+		j = i - 1;
+		for (int k = l; k < p; k++, j--) {
+			temp = a[k];
+			a[k] = a[j];
+			a[j] = temp;
+		}
+
+		// Move all right same occurrences from end
+		// to adjacent to arr[i]
+		i = i + 1;
+		for (int k = r - 1; k > q; k--, i++) {
+			temp = a[i];
+			a[i] = a[k];
+			a[k] = temp;
+		}
 	}
 
 	private static int partition2(int[] a, int l, int r) {
@@ -50,14 +103,16 @@ public class Sorting {
 		if (l >= r) {
 			return;
 		}
-		int k = random.nextInt(r - l + 1) + l;
-		int t = a[l];
-		a[l] = a[k];
-		a[k] = t;
+//		int k = random.nextInt(r - l + 1) + l;
+//		int t = a[l];
+//		a[l] = a[k];
+//		a[k] = t;
 		// use partition3
-		int[] m = partition3(a, l, r);
-		randomizedQuickSort(a, l, m[0] - 1);
-		randomizedQuickSort(a, m[1] + 1, r);
+		partition3(a, l, r);
+
+		// Recur
+		randomizedQuickSort(a, l, j);
+		randomizedQuickSort(a, i, r);
 	}
 
 	public static void main(String[] args) {
