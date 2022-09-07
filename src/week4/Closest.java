@@ -30,21 +30,21 @@ public class Closest {
 		return ans;
 	}
 
-	static double minimalDistance(Point[] pList, int startIndex, int endIndex) {
+	static double minimalDistanceSquare(Point[] pList, int startIndex, int endIndex) {
 		double ans = Double.POSITIVE_INFINITY;
 		// write your code here
 		if (startIndex + 1 == endIndex)
-			return Math.sqrt(Math.pow(pList[0].x - pList[1].x, 2) + Math.pow(pList[0].y - pList[1].y, 2));
+			return Math.pow(pList[0].x - pList[1].x, 2) + Math.pow(pList[0].y - pList[1].y, 2);
 		int mid = startIndex + (endIndex - startIndex) / 2;
-		double dl = minimalDistance(pList, startIndex, mid);
-		double dr = minimalDistance(pList, mid, endIndex);
+		double dl = minimalDistanceSquare(pList, startIndex, mid);
+		double dr = minimalDistanceSquare(pList, mid, endIndex);
 		
 		double d = Math.min(dl, dr);
 		Point midPoint = pList[mid];
 		Point[] pListTemp = new Point[endIndex];
 		int tempSize = 0;
 		for (int i = 0; i < endIndex; i++) {
-			if (Math.abs(pList[i].x - midPoint.x) < d) {
+			if (Math.abs(pList[i].x - midPoint.x) < Math.sqrt(d)) {
 				pListTemp[tempSize] = pList[i];
 				tempSize++;
 			}
@@ -53,15 +53,19 @@ public class Closest {
 		int size = tempSize;
 		Arrays.sort(pListTemp, 0, tempSize, Comparator.comparing(p -> p.y));
 		for (int i = 0; i < size; i++) {
-			for (int j = i + 1; j < size && (pListTemp[j].y - pListTemp[i].y < ans); ++j) {
-				if (Math.sqrt(Math.pow(pListTemp[i].x - pListTemp[j].x, 2)
-						+ Math.pow(pListTemp[i].y - pListTemp[j].y, 2)) < ans) {
-					ans = Math.sqrt(Math.pow(pListTemp[i].x - pListTemp[j].x, 2)
-							+ Math.pow(pListTemp[i].y - pListTemp[j].y, 2));
+			for (int j = i + 1; j < size && (pListTemp[j].y - pListTemp[i].y < Math.sqrt(ans)); ++j) {
+				if (Math.pow(pListTemp[i].x - pListTemp[j].x, 2)
+						+ Math.pow(pListTemp[i].y - pListTemp[j].y, 2) < ans) {
+					ans = Math.pow(pListTemp[i].x - pListTemp[j].x, 2)
+							+ Math.pow(pListTemp[i].y - pListTemp[j].y, 2);
 				}
 			}
 		}
 		return Math.min(ans, d);
+	}
+	
+	public static double minimalDistance(double powDistance) {
+		return Math.sqrt(powDistance);
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -77,7 +81,7 @@ public class Closest {
 			Point p = new Point(x[i], y[i]);
 			pList[i] = p;
 		}
-		System.out.println(minimalDistance(pList, 0, pList.length));
+		System.out.println(minimalDistance(minimalDistanceSquare(pList, 0, pList.length)));
 		writer.close();
 	}
 
