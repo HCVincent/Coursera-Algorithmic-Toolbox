@@ -11,12 +11,28 @@ class EditDistance {
 			return tLength;
 		if (tLength == 0)
 			return sLength;
-		if (s.charAt(sLength - 1) == t.charAt(tLength - 1)) {
-			return editDistance(s.substring(0,s.length()-1), t.substring(0,t.length()-1));
+		int[][] nums = new int[sLength + 1][tLength + 1];
+		for (int i = 0; i <= sLength; i++) {
+			nums[i][0] = i;
 		}
-		return 1 + min(editDistance(s, t.substring(0,t.length()-1)), editDistance(s.substring(0,s.length()-1), t),
-				editDistance(s.substring(0,s.length()-1), t.substring(0,t.length()-1)));
+		for (int j = 0; j <= tLength; j++) {
+			nums[0][j] = j;
+		}
 
+		for (int i = 1; i <= sLength; i++) {
+			for (int j = 1; j <= tLength; j++) {
+				int insertion = nums[i][j - 1] + 1;
+				int deletion = nums[i - 1][j] + 1;
+				int match = nums[i - 1][j - 1];
+				int mismatch = nums[i - 1][j - 1] + 1;
+				if (s.charAt(i - 1) == t.charAt(j - 1)) {
+					nums[i][j] = min(insertion,deletion,match);
+				} else {
+					nums[i][j] = min(insertion,deletion,mismatch);
+				}
+			}
+		}
+		return nums[sLength][tLength];
 	}
 
 	public static void main(String args[]) {
