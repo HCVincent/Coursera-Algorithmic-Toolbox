@@ -1,4 +1,4 @@
-//package week6;
+package week6;
 
 import java.util.*;
 import java.io.*;
@@ -9,27 +9,42 @@ public class Partition3 {
 		if (arrLength < 3) {
 			return 0;
 		}
+		int[] temp = new int[A.length];
 		int sum = Arrays.stream(A).sum();
 		if (sum == 0 || sum % 3 != 0)
 			return 0;
-		int[][] nums = new int[sum / 3 + 1][arrLength + 1];
-		int count = 0;
-		for (int i = 1; i < sum / 3 + 1; i++) {
-			for (int j = 1; j < arrLength + 1; j++) {
-				nums[i][j] = nums[i][j - 1];
-				if (A[j - 1] <= i) {
-					int temp = nums[i - A[j - 1]][j - 1] + A[j - 1];
-					if (temp > nums[i][j]) {
-						nums[i][j] = temp;
-					}
-				}
-				if (nums[i][j] == sum / 3) {
-					count++;
-				}
-			}
+		int result = isSubsetExist(A, arrLength - 1, sum / 3, sum / 3, sum / 3, temp) ? 1 : 0;
+		return result;
+	}
+
+	public static boolean isSubsetExist(int[] S, int n, int a, int b, int c, int[] arr) {
+		if (a == 0 && b == 0 && c == 0) {
+			return true;
 		}
-		if(count < 3) return 0;
-		else return 1;
+
+		if (n < 0) {
+			return false;
+		}
+
+		boolean A = false;
+		if (a - S[n] >= 0) {
+			arr[n] = 1; 
+			A = isSubsetExist(S, n - 1, a - S[n], b, c, arr);
+		}
+
+		boolean B = false;
+		if (!A && (b - S[n] >= 0)) {
+			arr[n] = 2; 
+			B = isSubsetExist(S, n - 1, a, b - S[n], c, arr);
+		}
+
+		boolean C = false;
+		if ((!A && !B) && (c - S[n] >= 0)) {
+			arr[n] = 3; 
+			C = isSubsetExist(S, n - 1, a, b, c - S[n], arr);
+		}
+
+		return A || B || C;
 	}
 
 	public static void main(String[] args) {
